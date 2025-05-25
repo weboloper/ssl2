@@ -1,0 +1,50 @@
+# =======================================
+# 🐍 .gitignore for Django (Server Folder)
+# =======================================
+
+# ─── PYTHON COMPILED FILES ─────────────
+*.pyc
+*.pyo
+__pycache__/
+
+# ─── ENVIRONMENT VARIABLES ─────────────
+.env
+.env.*
+!.env.sample  # Keep a template for reference
+
+# ─── DATABASE FILES ────────────────────
+*.sqlite3
+db.sqlite3
+celerydb.sqlite3
+data/
+
+# ─── DJANGO MIGRATIONS ─────────────────
+*/migrations/*.pyc
+*/migrations/__pycache__/
+
+# ─── STATIC & MEDIA FILES ──────────────
+staticfiles/
+media/
+
+# Allow app-level static files (e.g. myapp/static/)
+!*/static/*
+
+# ─── NODE MODULES ──────────────────────
+/node_modules/
+
+# ─── LOG FILES ─────────────────────────
+*.log
+stderr.log
+
+# ─── VIRTUAL ENVIRONMENTS ─────────────
+env/
+venv/
+
+# ─── IDE & OS FILES ────────────────────
+.vscode/
+.idea/
+.DS_Store
+
+# ─── NGINX / TEMP FILES ────────────────
+public/
+tmp/

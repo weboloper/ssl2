@@ -1,0 +1,77 @@
+services:
+  redis:
+    image: redis
+    container_name: redis
+
+  db:
+      image: postgres
+      container_name: postgres_db
+      environment:
+        - POSTGRES_DB=${DB_NAME}
+        - POSTGRES_USER=${DB_USER}
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+      volumes:
+        - ./data/db:/var/lib/postgresql/data
+      ports:
+        - "5432:5432"
+      restart: always
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "5050:80"
+    restart: always
+  backend:
+    image: backend:django
+    container_name: django_app
+    command: >
+      sh -c "python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8000 config.wsgi:application"
+    build:
+      context: ./backend
+    volumes:
+      - ./backend:/django
+      - static_volume:/django/staticfiles
+      - media_volume:/django/media
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_ENV=production
+  celery:
+    build:
+      context: ./backend
+    container_name: celery
+    command: celery -A config worker -l INFO
+    depends_on:
+      - db
+      - redis
+      - backend
+  nginx:
+    image: nginx:1.15-alpine
+    restart: unless-stopped
+    volumes:
+      - ./nginx/conf/app.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+      - ./nginx/html:/var/www/html
+      - static_volume:/django/staticfiles
+      - media_volume:/django/media
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+      - "443:443"
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+  
+volumes:
+  static_volume:
+  media_volume:

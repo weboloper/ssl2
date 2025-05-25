@@ -1,0 +1,75 @@
+# ===============================
+# 🐍 Python
+# ===============================
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+*.pot
+*.pyc
+
+# ===============================
+# 🔒 Environment & Secrets
+# ===============================
+.env
+*.env
+*.secret
+
+# ===============================
+# 🐘 PostgreSQL / Database
+# ===============================
+data/
+*.db
+*.sql
+
+# ===============================
+# 🐳 Docker
+# ===============================
+docker-compose.override.yml
+del/
+*.pid
+
+# ===============================
+# 📦 Virtual Environments
+# ===============================
+venv/
+env/
+.venv/
+ENV/
+
+# ===============================
+# ⚙️ Django
+# ===============================
+*.mo
+staticfiles/
+media/
+*.bak
+
+# ===============================
+# 💻 OS / Editor / Misc
+# ===============================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ===============================
+# 🔍 Testing / Coverage
+# ===============================
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+nosetests.xml
+test-results/
+junit.xml
+
+# ===============================
+# 📦 Node (if using JS tooling)
+# ===============================
+node_modules/
+*.lock
+dist/
+build/
