@@ -84,8 +84,10 @@ Follow these steps to initialize and configure your Django application:
    Set DJANGO_ENV on Cpanel (dev, staging, or production)
 
 2. **Initialize Git repository**
+   Remove old passenger_wsgi and pull repository
 
 ```bash
+rm passenger_wsgi.py
 git init
 git remote add origin <repository_url>
 git pull origin main
@@ -103,4 +105,10 @@ source /home/username/venv....
 
 ```bash
 pip install -r requirements.txt
+```
+
+## 📂 Frontend Compose
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.frontend.yml up -d
 ```

@@ -10,7 +10,7 @@ __pycache__/
 # ─── ENVIRONMENT VARIABLES ─────────────
 .env
 .env.*
-!.env.sample  # Keep a template for reference
+!.env.sample
 
 # ─── DATABASE FILES ────────────────────
 *.sqlite3

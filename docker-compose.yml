@@ -2,7 +2,6 @@ services:
   redis:
     image: redis
     container_name: redis
-
   db:
       image: postgres
       container_name: postgres_db
@@ -60,9 +59,9 @@ services:
       - media_volume:/django/media
     depends_on:
       - backend
-    ports:
-      - "80:80"
-      - "443:443"
+    # ports:
+    #   - "80:80"
+    #   - "443:443"
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
   certbot:
     image: certbot/certbot
@@ -71,7 +70,44 @@ services:
       - ./nginx/certbot/conf:/etc/letsencrypt
       - ./nginx/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    restart: always
+  # cadvisor:
+  #   image: gcr.io/cadvisor/cadvisor:latest
+  #   container_name: cadvisor
+  #   ports:
+  #     - "8080:8080"
+  #   volumes:
+  #     - /:/rootfs:ro
+  #     - /var/run:/var/run:ro
+  #     - /sys:/sys:ro
+  #     - /var/lib/docker/:/var/lib/docker:ro
+  #   restart: always
+  # prometheus:
+  #   image: prom/prometheus
+  #   container_name: prometheus
+  #   volumes:
+  #     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  #   ports:
+  #     - "9090:9090"
+
+  # grafana:
+  #   image: grafana/grafana
+  #   container_name: grafana
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - grafana-storage:/var/lib/grafana
   
 volumes:
   static_volume:
   media_volume:
+  portainer_data:
+  # grafana-storage:
